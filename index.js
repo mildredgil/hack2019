@@ -7,7 +7,7 @@
 
 const Alexa = require('ask-sdk-core');
 const questions = require('./questions');
-const moreInfo = require('./masInfo');
+const info = require('./masInfo');
 const i18n = require('i18next');
 const sprintf = require('i18next-sprintf-postprocessor');
 
@@ -345,12 +345,39 @@ const MoreInfoIntentHandler = {
   },
   handle(handlerInput) {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = moreInfo;
+    const speechText = info.intro;
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
       .getResponse();
+  },
+};
+
+const ContinueMoreInfoIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ContinueMoreInfoIntent';
+  },
+  handle(handlerInput) {
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = info.conclusion;
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse();
+  },
+};
+
+const MenuIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'MenuIntent';
+  },
+  handle(handlerInput) {
+
+    return menuGame(true, handlerInput);
   },
 };
 
@@ -671,6 +698,8 @@ exports.handler = skillBuilder
     MoreInfoIntentHandler,
     RegisterNameIntentHandler,
     FriendIntentHandler,
+    ContinueMoreInfoIntentHandler,
+    MenuIntentHandler,
     UnhandledIntent
   )
   .addRequestInterceptors(

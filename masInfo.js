@@ -1,8 +1,8 @@
-module.exports = 
+let intro =
 "El imperio azteca, también conocido"
 +"como mexica, fue una civilización"
 +"prehispánica que habitó en el territorio"
-+"mexicano entre el siglo XIV y XVI."
++"mexicano entre el siglo XIV y XVI. "
 +"Los aztecas eran un pueblo nómada y se"
 +"cree que emigraron desde América del"
 +"Norte hacia el valle, donde terminaron"
@@ -39,17 +39,20 @@ module.exports =
 
 +"<break time = '1s'/>"
 
-+"En esta cultura, el Tlatoani era el"
-+"máximo exponente del gobierno, y su"
-+"deber era tomar todas las decisiones"
++"En esta cultura, el Tlatoani era el "
++"máximo exponente del gobierno, y su "
++"deber era tomar todas las decisiones "
 +"concernientes al imperio; <break time = '0.4s'/>"
 +"similar a la figura de un emperador."
 +"<break time = '0.7s'/>Tras la"
 +"anexión de un territorio nuevo al"
 +"imperio, este era dividido en"
-+"provincias y se le asignaba un gobernador."
++"provincias y se le asignaba un gobernador. "
 
-+"La civilización se encontraba"
++"Para mas informacion di continuar aprendiendo para regresar al menu di Ver menu";
+
+let conclusion = 
+"La civilización se encontraba"
 +"disciplinadamente dividida en varios"
 +"grupos sociales como <break time = '0.6s'/>"
 +"la nobleza, <break time = '0.4s'/>"
@@ -61,6 +64,7 @@ module.exports =
 +"los sacerdotes. El resto de"
 +"la población estaba conformada por"
 +"artesanos, agricultores y esclavos."
+
 +"<audio src='soundbank://soundlibrary/wood/moves/moves_02'/>"
 +"<audio src='soundbank://soundlibrary/voices/crowds/crowds_10'/>"
 
@@ -81,7 +85,7 @@ module.exports =
 +"Su sistema de compra venta era el"
 +"trueque en los mercados. "
 
-"<break time = '1s'/>"
++"<break time = '1s'/>"
 
 +"<audio src='soundbank://soundlibrary/voices/chorus/chorus_02'/>"
 +"En cuanto a la religión, los aztecas"
@@ -91,7 +95,7 @@ module.exports =
 +"ellos el realizar"
 +"sacrificios, fuesen humanos o animales,"
 +"ya que creían que la sangre era el"
-+"alimento primordial de los dioses."
++"alimento primordial de los dioses. "
 +"Entre los dioses más importantes de"
 +"esta cultura, se encuentran"
 +"Huitzilopochtli, dios de la guerra;"
@@ -103,7 +107,7 @@ module.exports =
 +"Coatlicue, la diosa madre. "
 +"<audio src='soundbank://soundlibrary/voices/chorus/chorus_12'/>"
 
-"<break time = '1s'/>"
++ "<break time = '1s'/>"
 
 +"En 1519, Hernán Cortés, desobedeciendo"
 +"las órdenes expresas del gobernador de "
@@ -134,3 +138,6 @@ module.exports =
 +"importantes de América. "
 +"<break time = '0.5s'/>"
 +"<audio src='soundbank://soundlibrary/explosions/fire/fire_03'/>"
++"Para reproducir de nuevo, di Más información, para regresar al menu, di Ver menu";
+
+module.exports = {intro, conclusion};
