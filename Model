@@ -154,23 +154,6 @@
                     ]
                 },
                 {
-                    "name": "exitIntent",
-                    "slots": [],
-                    "samples": [
-                        "sal de ahi soldado",
-                        "he salvado el halo",
-                        "piece out",
-                        "mision completada",
-                        "gracias",
-                        "grax",
-                        "terminar partida",
-                        "adios Xomotl",
-                        "salir",
-                        "bye",
-                        "adios"
-                    ]
-                },
-                {
                     "name": "RegisterNameIntent",
                     "slots": [
                         {
