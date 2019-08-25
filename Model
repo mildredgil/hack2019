@@ -1,0 +1,127 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "trivia de mexico",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AnswerIntent",
+                    "slots": [
+                        {
+                            "name": "Answer",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "la respuesta es {Answer}",
+                        "my answer is {Answer}",
+                        "es {Answer}",
+                        "{Answer} es la respuesta",
+                        "{Answer}"
+                    ]
+                },
+                {
+                    "name": "DontKnowIntent",
+                    "slots": [],
+                    "samples": [
+                        "no se ",
+                        "no lo se",
+                        "sepa",
+                        "sepa la bola",
+                        "ni idea",
+                        "no tengo idea",
+                        "quien sabe",
+                        "esta no la se"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StartOverIntent",
+                    "samples": [
+                        "quiero iniciar un juego nuevo",
+                        "con un juego nuevo",
+                        "inicia un juego nuevo",
+                        "iniciar juego nuevo",
+                        "comienza un juego",
+                        "empieza un juego",
+                        "juego nuevo",
+                        "empieza",
+                        "empieza nuevo juego"
+                    ]
+                },
+                {
+                    "name": "AMAZON.RepeatIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "SimulateFallBackIntent",
+                    "slots": [
+                        {
+                            "name": "anything",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "{anything} z",
+                        "{anything} y",
+                        "{anything} a",
+                        "{anything} b",
+                        "{anything} c",
+                        "{anything} d",
+                        "{anything} e",
+                        "{anything} f",
+                        "{anything} g",
+                        "{anything} h",
+                        "{anything} i",
+                        "{anything} j",
+                        "{anything} k",
+                        "{anything} l",
+                        "{anything} m",
+                        "{anything} n",
+                        "{anything} o",
+                        "{anything} p",
+                        "{anything} q",
+                        "{anything} r",
+                        "{anything} s",
+                        "{anything} t",
+                        "{anything} u",
+                        "{anything} v",
+                        "{anything} w",
+                        "{anything} x",
+                        "ellos",
+                        "ustedes ",
+                        "nosotros",
+                        "tu",
+                        "yo",
+                        "algo",
+                        "lo que sea",
+                        "a {anything}"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
