@@ -19,7 +19,8 @@
 +"el pueblo azteca debía buscar a un águila devorando "
 +"a una serpiente, posada sobre un nopal. "
 +"<audio src="soundbank://soundlibrary/water/nature/nature_10"/>"
-+"<break time = '1s'/>¿Te suena  <emphasis level="reduced">conocida esta imagen? </emphasis>"
++"<break time = '1s'/><break strength="medium"/>"
++"¿No te parece conocida esta imagen?"
 +"<prosody volume="x-loud">¡Es el símbolo que tenemos en nuestra bandera nacional!"
 +"</prosody>"
 
