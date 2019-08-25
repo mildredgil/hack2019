@@ -288,6 +288,16 @@ function menuGame(newGame, handlerInput) {
   return handlerInput.responseBuilder
   .speak(speechText)
   .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+  .addDirective({
+    type: 'Alexa.Presentation.APL.RenderDocument',
+    version: '1.0',
+    document: require('./menuAPL.json'),
+    datasources: {
+        'docdata': {
+            "menu": speechText
+        }
+    }
+  })
   .getResponse();
 }
 
@@ -352,7 +362,10 @@ const RegisterNameIntentHandler = {
 const FriendIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FriendIntent';
+        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FriendIntent'
+        || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'jugar');
   },
   handle(handlerInput) {
     // the attributes manager allows us to access session attributes
@@ -373,7 +386,10 @@ const GameIntentHandler = {
 const MoreInfoIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'MoreInfoIntent';
+      && handlerInput.requestEnvelope.request.intent.name === 'MoreInfoIntent'
+      || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'mas informacion');
   },
   handle(handlerInput) {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();

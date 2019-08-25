@@ -1,0 +1,107 @@
+{
+    "type": "APL",
+    "version": "1.1",
+    "settings": {},
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.1.0"
+        }
+    ],
+    "resources": [
+        {
+            "description": "Stock color for the light theme",
+            "colors": {
+                "colorTextPrimary": "#151920"
+            }
+        },
+        {
+            "description": "Stock color for the dark theme",
+            "when": "${viewport.theme == 'dark'}",
+            "colors": {
+                "colorTextPrimary": "#f0f1ef"
+            }
+        },
+        {
+            "description": "Standard font sizes",
+            "dimensions": {
+                "textSizeBody": 48,
+                "textSizePrimary": 27,
+                "textSizeSecondary": 23,
+                "textSizeSecondaryHint": 25
+            }
+        },
+        {
+            "description": "Common spacing values",
+            "dimensions": {
+                "spacingThin": 6,
+                "spacingSmall": 12,
+                "spacingMedium": 24,
+                "spacingLarge": 48,
+                "spacingExtraLarge": 72
+            }
+        },
+        {
+            "description": "Common margins and padding",
+            "dimensions": {
+                "marginTop": 40,
+                "marginLeft": 60,
+                "marginRight": 60,
+                "marginBottom": 40
+            }
+        }
+    ],
+    "styles": {},
+    "onMount": [],
+    "graphics": {},
+    "commands": {},
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+  "type": "Container",
+  "width": "100%",
+  "height": "100%",
+  "justifyContent": "center",
+  "items": [
+    {
+      "type": "AlexaButton",
+      "buttonText": "Jugar",
+      "id": "containedButtonId",
+      "paddingLeft": "@spacingLarge",
+      "paddingRight": "@spacingLarge",
+      "paddingBottom": "@spacingLarge",
+      "paddingTop": "@spacingLarge",
+      "primaryAction": {
+        "type": "SendEvent",
+        "arguments":[ 
+            "jugar"
+        ]
+      }
+    },
+    {
+      "type": "AlexaButton",
+      "buttonText": "+Info",
+      "buttonStyle": "outlined",
+      "id": "outlinedButtonId",
+      "paddingLeft": "@spacingLarge",
+      "paddingRight": "@spacingLarge",
+      "paddingBottom": "@spacingLarge",
+      "paddingTop": "@spacingLarge",
+      "primaryAction": {
+        "type": "SendEvent",
+        "arguments": [
+          "mas informacion"
+        ]
+      }
+    }
+  ]
+}
+
+        ]
+    }
+}
