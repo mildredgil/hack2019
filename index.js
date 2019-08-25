@@ -45,6 +45,7 @@ const languageString = {
       GAME_OVER_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. ¡Gracias por jugar conmigo!',
       GAME_OVER_WIN_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. HAZ GANADO! Sobreviviremos %s. HURRA! ... Creo que mi sistema se arreglo, ya podemos Regresar a casa, ufff, que alivio.',
       GAME_OVER_LOSS_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. Oh oh, este es el fin, fue un gusto conocerte %s, no soy fan de los sacrificios...',
+      GAME_OVER_ENEMY_MESSAGE: 'Un pequeñito consejo %s,  ¡CORREEEEEEE!.                 FIN.',
       SCORE_IS_MESSAGE: 'Tu puntuación es %s. '
     },
   },
@@ -429,6 +430,27 @@ const MenuIntentHandler = {
   },
 };
 
+const ImEnemyIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ImEnemyIntent';
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    let name = sessionAttributes.name;
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = requestAttributes.t(
+      'GAME_OVER_ENEMY_MESSAGE',
+      name
+    );
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse();
+  },
+}
+
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
@@ -748,6 +770,7 @@ exports.handler = skillBuilder
     FriendIntentHandler,
     ContinueMoreInfoIntentHandler,
     MenuIntentHandler,
+    ImEnemyIntentHandler,
     UnhandledIntent
   )
   .addRequestInterceptors(

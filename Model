@@ -208,6 +208,17 @@
                         "ir a menu",
                         "regresar al menu"
                     ]
+                },
+                {
+                    "name": "ImEnemyIntent",
+                    "slots": [],
+                    "samples": [
+                        "enemigo tuyo",
+                        "yo soy el enemigo",
+                        "no soy amigo",
+                        "enemigo",
+                        "soy enemigo"
+                    ]
                 }
             ],
             "types": []
