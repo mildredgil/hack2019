@@ -7,6 +7,7 @@
 
 const Alexa = require('ask-sdk-core');
 const questions = require('./questions');
+const moreInfo = require('./masInfo');
 const i18n = require('i18next');
 const sprintf = require('i18next-sprintf-postprocessor');
 
@@ -344,7 +345,7 @@ const MoreInfoIntentHandler = {
   },
   handle(handlerInput) {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = "Mas información";
+    const speechText = moreInfo;
 
     return handlerInput.responseBuilder
       .speak(speechText)
