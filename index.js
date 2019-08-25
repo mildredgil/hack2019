@@ -226,7 +226,7 @@ function menuGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   let speechText = newGame
     ? requestAttributes.t('NEW_GAME_MESSAGE', requestAttributes.t('GAME_NAME'))
-      + requestAttributes.t('MENU_MESSAGE', GAME_LENGTH.toString())
+      + requestAttributes.t('MENU_MESSAGE')
     : '';
 
   return handlerInput.responseBuilder
