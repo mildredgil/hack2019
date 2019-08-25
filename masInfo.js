@@ -7,25 +7,25 @@ module.exports =
 +"cree que emigraron desde América del "
 +"Norte hacia el valle, donde terminaron"
 +"por asentarse en un islote cerca del "
-+"lago de Texcoco. <audio src="soundbank://soundlibrary/human/amzn_sfx_people_walking_02"/>"
-+"<audio src="soundbank://soundlibrary/backgrounds_ambience/construction_factory/construction_factory_03"/>"
++"lago de Texcoco. <audio src='soundbank://soundlibrary/human/amzn_sfx_people_walking_02'/>"
++"<audio src='soundbank://soundlibrary/backgrounds_ambience/construction_factory/construction_factory_03'/>"
 +"Según la leyenda, "
 +"esta civilización estaba en búsqueda"
 +"constante de la tierra prometida, ya "
 +"que el Dios Huitzilopochtli se les "
 +"había presentado,dándoles el propósito de construir"
-+"la ciudad que se convertiría <break strength="medium"/>"
++"la ciudad que se convertiría <break strength='medium'/>"
 +"en el imperio más grande de mesoamérica."
 +"<break time = '0.3s'/> Para encontrar el lugar correcto, "
 +"el pueblo azteca debía buscar a un águila devorando "
 +"a una serpiente, posada sobre un nopal. "
-+"<audio src="soundbank://soundlibrary/water/nature/nature_10"/>"
-+"<break time = '1s'/><break strength="medium"/>"
++"<audio src='soundbank://soundlibrary/water/nature/nature_10'/>"
++"<break time = '1s'/><break strength='medium'/>"
 +"¿No te parece conocida esta imagen?"
-+"<prosody volume="x-loud">¡Es el símbolo que tenemos en nuestra bandera nacional!"
++"<prosody volume='x-loud'>¡Es el símbolo que tenemos en nuestra bandera nacional!"
 +"</prosody>"
 
-+"<break time = '1s'/>
++"<break time = '1s'/>"
 
 +"Poco a poco el pueblo azteca fue "
 +"absorbiendo a otras civilizaciones"
@@ -35,9 +35,9 @@ module.exports =
 +"para imponer sus costumbres e idioma, "
 +"<break time = '0.4s'/>"
 +"el náhuatl. "
-+"<audio src="soundbank://soundlibrary/battle/amzn_sfx_battle_yells_men_01"/>"
++"<audio src='soundbank://soundlibrary/battle/amzn_sfx_battle_yells_men_01'/>"
 
-+"<break time = '1s'/>
++"<break time = '1s'/>"
 
 +"En esta cultura, el Tlatoani era el"
 +"máximo exponente del gobierno, y su "
@@ -61,16 +61,16 @@ module.exports =
 +"los sacerdotes. El resto de "
 +"la población estaba conformada por "
 +"artesanos, agricultores y esclavos."
-+"<audio src="soundbank://soundlibrary/wood/moves/moves_02"/>"
-+"<audio src="soundbank://soundlibrary/voices/crowds/crowds_10"/>"
++"<audio src='soundbank://soundlibrary/wood/moves/moves_02'/>"
++"<audio src='soundbank://soundlibrary/voices/crowds/crowds_10'/>"
 
-<break time = '1s'/>
++"<break time = '1s'/>"
 
 +"La economía de los aztecas se basaba"
 +"en la pesca, la caza, el cultivo del"
 +"maíz, el caco, el algodón, <break time = '0.2s'/>"
 +"chiles y aguacate, <break time = '0.2s'/>"
-+"entre <emphasis level="moderate">muchas</emphasis>"
++"entre <emphasis level='moderate'>muchas</emphasis>"
 +"otras plantas, <break time = '0.2s'/>"
 +"así como el comercio y los tributos "
 +"cobrados a pueblos sometidos. <break time = '0.2s'/>"
@@ -81,9 +81,9 @@ module.exports =
 +"Su sistema de compra venta era el "
 +"trueque en los mercados. "
 
-<break time = '1s'/>
+"<break time = '1s'/>"
 
-+"<audio src="soundbank://soundlibrary/voices/chorus/chorus_02"/>"
++"<audio src='soundbank://soundlibrary/voices/chorus/chorus_02'/>"
 +"En cuanto a la religión, los aztecas "
 +"eran politeístas. Es decir, adoraban "
 +"a varios dioses. <break time = '0.3s'/>"
@@ -101,9 +101,9 @@ module.exports =
 +"Quetzalcoatl, la serpiente emplumada "
 +"<break time = '0.3s'/> y "
 +"Coatlicue, la diosa madre. "
-+"<audio src="soundbank://soundlibrary/voices/chorus/chorus_12"/>"
++"<audio src='soundbank://soundlibrary/voices/chorus/chorus_12'/>"
 
-<break time = '1s'/>
+"<break time = '1s'/>"
 
 +"En 1519, Hernán Cortés, desobedeciendo"
 +"las órdenes expresas del gobernador de "
@@ -133,4 +133,4 @@ module.exports =
 +"el final de uno de los imperios más "
 +"importantes de América. "
 +"<break time = '0.5s'/>"
-+"<audio src="soundbank://soundlibrary/explosions/fire/fire_03"/>"
++"<audio src='soundbank://soundlibrary/explosions/fire/fire_03'/>"
