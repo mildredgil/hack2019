@@ -45,7 +45,7 @@
         {
             "description": "Common margins and padding",
             "dimensions": {
-                "marginTop": 40,
+                "marginTop": 130,
                 "marginLeft": 60,
                 "marginRight": 60,
                 "marginBottom": 40
@@ -79,6 +79,8 @@
                         "paddingLeft": "@marginLeft",
                         "paddingRight": "@marginRight",
                         "paddingBottom": "@marginBottom",
+                        "paddingTop": "@marginTop",
+                        "alignItems": "center",
                         "items": [
                             {
                                 "type": "Text",
