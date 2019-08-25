@@ -46,7 +46,7 @@ const languageString = {
       GAME_OVER_WIN_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. HAZ GANADO! Sobreviviremos %s. HURRA! ... Creo que mi sistema se arreglo, ya podemos Regresar a casa, ufff, que alivio.',
       GAME_OVER_LOSS_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. Oh oh, este es el fin, fue un gusto conocerte %s, no soy fan de los sacrificios...',
       GAME_OVER_ENEMY_MESSAGE: 'Un pequeñito consejo %s,  ¡CORREEEEEEE!.                 FIN.',
-      SCORE_IS_MESSAGE: 'Tu puntuación es %s. '
+      SCORE_IS_MESSAGE: 'Tu puntuación es %s XOMOTL. '
     },
   },
   'es-es': {
@@ -155,6 +155,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
 
   const sessionAttributes = attributesManager.getSessionAttributes();
   const gameQuestions = sessionAttributes.questions;
+  let puntuaciones = sessionAttributes.puntuaciones;
   let correctAnswerIndex = parseInt(sessionAttributes.correctAnswerIndex, 10);
   let currentScore = parseInt(sessionAttributes.score, 10);
   let currentQuestionIndex = parseInt(sessionAttributes.currentQuestionIndex, 10);
@@ -188,6 +189,22 @@ function handleUserGuess(userGaveUp, handlerInput) {
       GAME_LENGTH.toString(),
       name
     );
+    
+    const isPuntuaciones = puntuaciones;
+    if(!isPuntuaciones) {
+      puntuaciones = [];
+      puntuaciones.push({
+        'puntuacion':currentScore,
+        'nombre': name
+      });
+    } else {
+      puntuaciones.push({
+        'puntuacion':currentScore,
+        'nombre': name
+      });
+    }
+    sessionAttributes.puntuaciones = puntuaciones;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return responseBuilder
       .speak(speechOutput)
@@ -201,6 +218,22 @@ function handleUserGuess(userGaveUp, handlerInput) {
       GAME_LENGTH.toString(),
       name
     );
+
+    const isPuntuaciones = puntuaciones;
+    if(!isPuntuaciones) {
+      puntuaciones = [];
+      puntuaciones.push({
+        'puntuacion':currentScore,
+        'nombre': name
+      });
+    } else {
+      puntuaciones.push({
+        'puntuacion':currentScore,
+        'nombre': name
+      });
+    }
+    sessionAttributes.puntuaciones = puntuaciones;
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return responseBuilder
       .speak(speechOutput)
@@ -260,7 +293,8 @@ function handleUserGuess(userGaveUp, handlerInput) {
     questions: gameQuestions,
     score: currentScore,
     correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0],
-    name: sessionAttributes['name']
+    name: sessionAttributes['name'],
+    puntuaciones: sessionAttributes['puntuaciones'],
   });
 
   return responseBuilder.speak(speechOutput)
@@ -376,13 +410,54 @@ const FriendIntentHandler = {
 
 const GameIntentHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'GameIntent';
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent';
   },
   handle(handlerInput) {
     return requestName(handlerInput);    
   },
 };
+
+
+const DisplayPointsIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'DisplayPointsIntent'
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    let speechText = "";
+
+  if(sessionAttributes.puntuaciones.length > 0) {
+    sessionAttributes.puntuaciones.forEach(puntaje => {
+      speechText += "nombre " + puntaje.nombre +
+      " .Puntos " + puntaje.puntuacion
+    });
+  } else {
+    speechText = "No hay puntajes registrados";
+  }
+    
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .getResponse();
+  },
+}
+
+const CleanPointsIntentHandler = {
+  canHandle(handlerInput) {
+      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'CleanPointsIntent'
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes['puntuaciones'] = [];
+    const speechText = "Borrado";
+    
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .getResponse();
+  },
+}
 
 const MoreInfoIntentHandler = {
   canHandle(handlerInput) {
@@ -455,6 +530,7 @@ function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
   const name = sessionAttributes['name'];
+  const puntuaciones = sessionAttributes['puntuaciones'];
   let speechOutput = newGame
     ? requestAttributes.t(' <voice name="Enrique"><prosody pitch="high"><prosody volume="x-loud">nepatlalistli tekipanoa yoli tlania tetlamolistli tlatlani temachyotl tlauaualoni tetlajtolana melauak tlatlani makuili xomotl chikome immanyotl tetlapolotia olinmitl ka chachamekatli</prosody></prosody></voice>') 
       + requestAttributes.t('<break time="1s"/> Dice que no confia en nosotros pero por ahora ser amigo bastara para mantenerte vivo, <break time="1s"/> nos hara unas pruebas para determinar si somos de confianza o no.')
@@ -493,7 +569,8 @@ function startGame(newGame, handlerInput) {
     questions: gameQuestions,
     score: 0,
     correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0],
-    name: name
+    name: name,
+    puntuaciones: puntuaciones
   });
 
   handlerInput.attributesManager.setSessionAttributes(_sessionAttributes);
@@ -765,12 +842,14 @@ exports.handler = skillBuilder
     SessionEndedRequest,
     FallbackHandler,
     GameIntentHandler,
+    DisplayPointsIntentHandler,
     MoreInfoIntentHandler,
     RegisterNameIntentHandler,
     FriendIntentHandler,
     ContinueMoreInfoIntentHandler,
     MenuIntentHandler,
     ImEnemyIntentHandler,
+    CleanPointsIntentHandler,
     UnhandledIntent
   )
   .addRequestInterceptors(

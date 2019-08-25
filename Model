@@ -121,6 +121,14 @@
                     ]
                 },
                 {
+                    "name": "CleanPointsIntent",
+                    "slots": [],
+                    "samples": [
+                        "limpiar puntos",
+                        "vaciar puntaje"
+                    ]
+                },
+                {
                     "name": "GameIntent",
                     "slots": [],
                     "samples": [
@@ -182,6 +190,10 @@
                     "name": "FriendIntent",
                     "slots": [],
                     "samples": [
+                        "amiga de todos",
+                        "amiga por su puesto",
+                        "soy amiga",
+                        "amiga",
                         "amigo por su puesto",
                         "considerame amigo",
                         "soy amigo",
@@ -218,6 +230,16 @@
                         "no soy amigo",
                         "enemigo",
                         "soy enemigo"
+                    ]
+                },
+                {
+                    "name": "DisplayPointsIntent",
+                    "slots": [],
+                    "samples": [
+                        "tabla de puntuaciones",
+                        "puntuaciones",
+                        "mostrar puntuaciones",
+                        "ver puntuaciones"
                     ]
                 }
             ],

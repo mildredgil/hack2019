@@ -70,7 +70,7 @@
   "items": [
     {
       "type": "AlexaButton",
-      "buttonText": "Jugar",
+      "buttonText": "Jugar sin INTRO",
       "id": "containedButtonId",
       "paddingLeft": "@spacingLarge",
       "paddingRight": "@spacingLarge",
