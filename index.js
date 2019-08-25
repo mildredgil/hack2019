@@ -12,7 +12,7 @@ const sprintf = require('i18next-sprintf-postprocessor');
 
 const ANSWER_COUNT = 4;
 const GAME_LENGTH = 5;
-const SKILL_NAME = 'Trivia de México';
+const SKILL_NAME = 'Conociendo mis raices';
 const FALLBACK_MESSAGE = 'Recuerda, en esta skill yo te hago preguntas y respondes con el número de tu respuesta. Dime repite para volver a preguntarte o puedes iniciar un juego nuevo. ¿Cómo te puedo ayudar?';
 const FALLBACK_REPROMPT = '¿Cómo te puedo ayudar?';
 
@@ -20,7 +20,7 @@ const languageString = {
   es: {
     translation: {
       QUESTIONS: questions.QUESTIONS_ES_MX,
-      GAME_NAME: 'Trivia de México',
+      GAME_NAME: 'XOMOTL: Conociendo mis raices',
       HELP_MESSAGE: 'Te haré %s preguntas de opción múltiple. Responde con el número de la respuesta. Para iniciar un juego nuevo di, comenzar juego. ¿Cómo te puedo ayudar?',
       REPEAT_QUESTION_MESSAGE: 'Para repetir la última pregunta dime: repíte',
       ASK_MESSAGE_START: 'Te gustaría comenzar a jugar?',
@@ -45,7 +45,7 @@ const languageString = {
   'es-es': {
     translation: {
       QUESTIONS: questions.QUESTIONS_ES_ES,
-      GAME_NAME: 'Trivia de México en España',
+      GAME_NAME: 'Conociendo mis raices en España',
       WELCOME_MESSAGE: 'Yo te haré %s preguntas sobre las capitales de estados mexicanos, intenta adivinar la respuesta correcta diciendo el número de la respuesta, comencemos. ',
     },
   },

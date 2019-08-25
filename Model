@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "trivia de mexico",
+            "invocationName": "conociendo mis raices",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
