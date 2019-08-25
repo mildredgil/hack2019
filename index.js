@@ -13,10 +13,10 @@ const sprintf = require('i18next-sprintf-postprocessor');
 
 var persistenceAdapter = getPersistenceAdapter();
 
-const ANSWER_COUNT = 5;
+const ANSWER_COUNT = 4;
 const GAME_LENGTH = 7;
 const SKILL_NAME = 'Conociendo mis raices';
-const FALLBACK_MESSAGE = 'Recuerda, en esta skill yo te hago preguntas y respondes con el número de tu respuesta. Dime repite para volver a preguntarte o puedes iniciar un juego nuevo. ¿Cómo te puedo ayudar?';
+const FALLBACK_MESSAGE = 'Recuerda, que dependemos de que respondas con el número de tu respuesta correctament. Dime repite para volver a preguntarte o puedes iniciar un juego nuevo. ¿Cómo te puedo ayudar?';
 const FALLBACK_REPROMPT = '¿Cómo te puedo ayudar?';
 
 const languageString = {
@@ -43,6 +43,8 @@ const languageString = {
       ANSWER_IS_MESSAGE: 'Esa respuesta es ',
       TELL_QUESTION_MESSAGE: 'Pregunta %s. %s ',
       GAME_OVER_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. ¡Gracias por jugar conmigo!',
+      GAME_OVER_WIN_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. HAZ GANADO! Sobreviviremos %s. HURRA! ... Creo que mi sistema se arreglo, ya podemos Regresar a casa, ufff, que alivio.',
+      GAME_OVER_LOSS_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. Oh oh, este es el fin, fue un gusto conocerte %s, no soy fan de los sacrificios...',
       SCORE_IS_MESSAGE: 'Tu puntuación es %s. '
     },
   },
@@ -155,6 +157,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
   let correctAnswerIndex = parseInt(sessionAttributes.correctAnswerIndex, 10);
   let currentScore = parseInt(sessionAttributes.score, 10);
   let currentQuestionIndex = parseInt(sessionAttributes.currentQuestionIndex, 10);
+  let name = sessionAttributes.name;
   const { correctAnswerText } = sessionAttributes;
   const requestAttributes = attributesManager.getRequestAttributes();
   const translatedQuestions = requestAttributes.t('QUESTIONS');
@@ -176,8 +179,36 @@ function handleUserGuess(userGaveUp, handlerInput) {
     );
   }
 
+  if(currentScore < 5 && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+    speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
+    speechOutput += speechOutputAnalysis + requestAttributes.t(
+      'GAME_OVER_LOSS_MESSAGE',
+      currentScore.toString(),
+      GAME_LENGTH.toString(),
+      name
+    );
+
+    return responseBuilder
+      .speak(speechOutput)
+    //agregar pantalla ganaste
+      .getResponse();
+  } else if(currentScore >= 5 && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+    speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
+    speechOutput += speechOutputAnalysis + requestAttributes.t(
+      'GAME_OVER_WIN_MESSAGE',
+      currentScore.toString(),
+      GAME_LENGTH.toString(),
+      name
+    );
+
+    return responseBuilder
+      .speak(speechOutput)
+    //agregar pantalla ganaste
+      .getResponse();
+  }
+
   // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
-  if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+  /*if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
     speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
     speechOutput += speechOutputAnalysis + requestAttributes.t(
       'GAME_OVER_MESSAGE',
@@ -189,7 +220,8 @@ function handleUserGuess(userGaveUp, handlerInput) {
       .speak(speechOutput)
     //agregar pantalla ganaste
       .getResponse();
-  }
+  }*/
+
   currentQuestionIndex += 1;
   correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
   const spokenQuestion = Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0];
@@ -389,7 +421,7 @@ function startGame(newGame, handlerInput) {
     ? requestAttributes.t(' <voice name="Enrique"><prosody pitch="high"><prosody volume="x-loud">nepatlalistli tekipanoa yoli tlania tetlamolistli tlatlani temachyotl tlauaualoni tetlajtolana melauak tlatlani makuili xomotl chikome immanyotl tetlapolotia olinmitl ka chachamekatli</prosody></prosody></voice>') 
       + requestAttributes.t('<break time="1s"/> Dice que no confia en nosotros pero por ahora ser amigo bastara para mantenerte vivo, <break time="1s"/> nos hara unas pruebas para determinar si somos de confianza o no.')
       + requestAttributes.t('<prosody volume="loud"> Las reglas para sobrevivir es contestar correctamente 5 preguntas y conseguir 5 Xomotl,<break time="1s"/> tendremos 7 oportunidades<prosody volume="x-loud"> al final<break time="1s"/> se te hara un juicio.</prosody> </prosody>')
-      + requestAttributes.t('<break time="1s"/> ¿Recuerdas la cultura Azteca cierto?.<break time="1s"/> Para poder continuar mejor, yo traducire ahora en adelante. ¿Estas Listo %s?', name)
+      + requestAttributes.t('<break time="1s"/> ¿Recuerdas la cultura Azteca cierto?. <break time="1s"/> Para poder continuar mejor, yo traducire ahora en adelante. ¿Estas Listo %s?', name)
     : '';
   const translatedQuestions = requestAttributes.t('QUESTIONS');
   const gameQuestions = populateGameQuestions(translatedQuestions);
