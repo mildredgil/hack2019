@@ -10,6 +10,8 @@ const questions = require('./questions');
 const i18n = require('i18next');
 const sprintf = require('i18next-sprintf-postprocessor');
 
+var persistenceAdapter = getPersistenceAdapter();
+
 const ANSWER_COUNT = 5;
 const GAME_LENGTH = 7;
 const SKILL_NAME = 'Conociendo mis raices';
@@ -51,6 +53,26 @@ const languageString = {
     },
   },
 };
+
+function getPersistenceAdapter(tableName) {
+  // This function is an indirect way to detect if this is part of an Alexa-Hosted skill
+  function isAlexaHosted() {
+      return process.env.S3_PERSISTENCE_BUCKET;
+  }
+  if (isAlexaHosted()) {
+      const {S3PersistenceAdapter} = require('ask-sdk-s3-persistence-adapter');
+      return new S3PersistenceAdapter({
+          bucketName: process.env.S3_PERSISTENCE_BUCKET
+      });
+  } else {
+      // IMPORTANT: don't forget to give DynamoDB access to the role you're using to run this lambda (via IAM policy)
+      const {DynamoDbPersistenceAdapter} = require('ask-sdk-dynamodb-persistence-adapter');
+      return new DynamoDbPersistenceAdapter({
+          tableName: tableName || 'user_name',
+          createTable: true
+      });
+  }
+}
 
 function populateGameQuestions(translatedQuestions) {
   const gameQuestions = [];
@@ -203,7 +225,8 @@ function handleUserGuess(userGaveUp, handlerInput) {
     correctAnswerIndex: correctAnswerIndex + 1,
     questions: gameQuestions,
     score: currentScore,
-    correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0]
+    correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0],
+    name: sessionAttributes['name']
   });
 
   return responseBuilder.speak(speechOutput)
@@ -235,20 +258,61 @@ function menuGame(newGame, handlerInput) {
   .getResponse();
 }
 
+function requestName(handlerInput) {
+//pregunta por el nombre
+  
+  return handlerInput.responseBuilder
+  // we use intent chaining to trigger the birthday registration multi-turn
+  .addDelegateDirective({
+      name: 'RegisterNameIntent',
+      confirmationStatus: 'NONE',
+      slots: {}
+  })
+  .getResponse();
+
+}
+
+const RegisterNameIntentHandler = {
+  canHandle(handlerInput) {
+      return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+          && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RegisterNameIntent';
+  },
+  handle(handlerInput) {
+    // the attributes manager allows us to access session attributes
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const {attributesManager, requestEnvelope, responseBuilder} = handlerInput;
+    const sessionAttributes = attributesManager.getSessionAttributes();
+    
+    const name = Alexa.getSlotValue(requestEnvelope, 'name');
+    
+    sessionAttributes['name'] = name;
+    const speechText = "Cierto " + name + " como lo pude olvidar!";
+    
+    return responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse(); 
+  }
+};  
+
+const FriendIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FriendIntent';
+  },
+  handle(handlerInput) {
+    // the attributes manager allows us to access session attributes
+    return startGame(true, handlerInput);
+  }
+}
+
 const GameIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'GameIntent';
   },
   handle(handlerInput) {
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = "Amazon AI.";
-
-    return startGame(true, handlerInput);
-    /*return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-      .getResponse();*/
+    return requestName(handlerInput);    
   },
 };
 
@@ -270,8 +334,10 @@ const MoreInfoIntentHandler = {
 
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+  const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+  const name = sessionAttributes['name'];
   let speechOutput = newGame
-    ? requestAttributes.t('NEW_GAME_MESSAGE', requestAttributes.t('GAME_NAME'))
+    ? requestAttributes.t('NEW_GAME_MESSAGE', name)
       + requestAttributes.t('WELCOME_MESSAGE', GAME_LENGTH.toString())
     : '';
   const translatedQuestions = requestAttributes.t('QUESTIONS');
@@ -294,21 +360,22 @@ function startGame(newGame, handlerInput) {
   }
 
   speechOutput += repromptText;
-  const sessionAttributes = {};
+  const _sessionAttributes = {};
 
   const translatedQuestion = translatedQuestions[gameQuestions[currentQuestionIndex]];
 
-  Object.assign(sessionAttributes, {
+  Object.assign(_sessionAttributes, {
     speechOutput: repromptText,
     repromptText,
     currentQuestionIndex,
     correctAnswerIndex: correctAnswerIndex + 1,
     questions: gameQuestions,
     score: 0,
-    correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0]
+    correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0],
+    name: name
   });
 
-  handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+  handlerInput.attributesManager.setSessionAttributes(_sessionAttributes);
 
   return handlerInput.responseBuilder
     .speak(speechOutput)
@@ -533,6 +600,36 @@ const ErrorHandler = {
   },
 };
 
+const LoadAttributesRequestInterceptor = {
+  async process(handlerInput) {
+      const {attributesManager, requestEnvelope} = handlerInput;
+      if (Alexa.isNewSession(requestEnvelope)){ //is this a new session? this check is not enough if using auto-delegate (more on next module)
+          const persistentAttributes = await attributesManager.getPersistentAttributes() || {};
+          console.log('Loading from persistent storage: ' + JSON.stringify(persistentAttributes));
+          //copy persistent attribute to session attributes
+          attributesManager.setSessionAttributes(persistentAttributes); // ALL persistent attributtes are now session attributes
+      }
+  }
+};
+
+// If you disable the skill and reenable it the userId might change and you loose the persistent attributes saved below as userId is the primary key
+const SaveAttributesResponseInterceptor = {
+  async process(handlerInput, response) {
+      if (!response) return; // avoid intercepting calls that have no outgoing response due to errors
+      const {attributesManager, requestEnvelope} = handlerInput;
+      const sessionAttributes = attributesManager.getSessionAttributes();
+      const shouldEndSession = (typeof response.shouldEndSession === "undefined" ? true : response.shouldEndSession); //is this a session end?
+      if (shouldEndSession || Alexa.getRequestType(requestEnvelope) === 'SessionEndedRequest') { // skill was stopped or timed out
+          // we increment a persistent session counter here
+          sessionAttributes['sessionCounter'] = sessionAttributes['sessionCounter'] ? sessionAttributes['sessionCounter'] + 1 : 1;
+          // we make ALL session attributes persistent
+          console.log('Saving to persistent storage:' + JSON.stringify(sessionAttributes));
+          attributesManager.setPersistentAttributes(sessionAttributes);
+          await attributesManager.savePersistentAttributes();
+      }
+  }
+};
+
 const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
   .addRequestHandlers(
@@ -548,8 +645,15 @@ exports.handler = skillBuilder
     FallbackHandler,
     GameIntentHandler,
     MoreInfoIntentHandler,
+    RegisterNameIntentHandler,
+    FriendIntentHandler,
     UnhandledIntent
   )
-  .addRequestInterceptors(LocalizationInterceptor)
+  .addRequestInterceptors(
+    LocalizationInterceptor,
+    LoadAttributesRequestInterceptor)
+  .addResponseInterceptors(
+      SaveAttributesResponseInterceptor)
+  .withPersistenceAdapter(persistenceAdapter)
   .addErrorHandlers(ErrorHandler)
   .lambda();

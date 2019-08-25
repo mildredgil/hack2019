@@ -169,9 +169,80 @@
                         "bye",
                         "adios"
                     ]
+                },
+                {
+                    "name": "RegisterNameIntent",
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "AMAZON.StreetName",
+                            "samples": [
+                                "guarda {name}",
+                                "registra {name}",
+                                "es  {name}",
+                                "mi nombre es {name}",
+                                "me llamo {name}",
+                                "{name}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "soy {name}",
+                        "hola soy {name}",
+                        "llamame {name}",
+                        "recuerda que me llamo {name}",
+                        "mi nombre es {name}",
+                        "me llamo {name}"
+                    ]
+                },
+                {
+                    "name": "FriendIntent",
+                    "slots": [],
+                    "samples": [
+                        "amigo por su puesto",
+                        "considerame amigo",
+                        "soy amigo",
+                        "Amigo"
+                    ]
                 }
             ],
             "types": []
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "RegisterNameIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "name",
+                            "type": "AMAZON.StreetName",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.771704437802.1223506842916"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.771704437802.1223506842916",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Tengo fallas en mis sistemas de circuitos puedes recordarme tu nombre"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿Me recuerdas tu nombre?"
+                    }
+                ]
+            }
+        ]
     }
 }
