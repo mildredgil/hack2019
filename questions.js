@@ -22,7 +22,17 @@ module.exports = {
     {'¿Cuantos infiernos hay?':['9','2','10','400','13']},
     {'¿Que es el cacao?':['Un regalo de los dioses','Un dulce','La eternidad','una ofrenda al sacerdote','el corazón de la ciudad']},
     {'¿Que ave criamos?':['guajolot','pez','gallina','cerdo','aguila',]},
-    {'¿Que rango obtiene un guerrero cuando captura a su primer enemigo?':['Tlamani','Cabo','Cabotl','Xomotl','Acamapichtli',]}
+    {'¿Que rango obtiene un guerrero cuando captura a su primer enemigo?':['Tlamani','Cabo','Cabotl','Xomotl','Acamapichtli',]},
+    {'¿Como se llama el gorro que reciben nuestros guerreros despues de su segunda captura?': ['Tlahuizil','tequiha','cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl',],},
+    {'¿Cómo se llaman los guerreros flecha?': ['Tequihua','Cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli',],},
+    {'¿Cómo se le dice a los guerreros águila?': ['Cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua',],},
+    {'¿Cómo se le dice a los guerreros jaguar?': ['Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua','Cuauhpilli',],},
+    {'¿Cómo se le llama a un guerrero rapado?': ['Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua','Cuauhpilli','Ocelopipiltin',],},
+    {'¿Cuál es nuestra arma favorita?': ['Maquahuitl','Teputzopilli','Quauhololli','Tematlatl','Átlatl','Tlahuitolli',],},
+    {'¿Qué arma larga tenemos?': ['Teputzopilli','Quauhololli','Tematlatl','Átlatl','Tlahuitolli','Maquahuitl',],},
+    {'¿Qué arma de larga distancia usamos?': ['Tlahuitolli','Teputzopilli','Quauhololli','Tematlatl','Átlatl','Maquahuitl',],},
+    {'¿Cómo se llama el dios de la música y la danza?': ['Ozomatli','Xochiquetzal','Huitzilopochi','Tezcatlipoca','Xipe Totec','Chalchiuhtlique',],},
+    {'¿Cómo se llama el dios de la muerte?': ['Mictlantechuhtli','Ozomatli','Xochiquetzal','Huitzilopochi','Tezcatlipoca','Xipe Totec',],}
   ],
   QUESTIONS_ES_ES: [
     {'Amigo recuerdas como se llama nuestro dios de la lluvia?':['tlaloc ','tonatiuh','Huitzilopochtli','Cuahautemoc','Quetzalcoatl']},
@@ -47,5 +57,15 @@ module.exports = {
     {'¿Cuantos infiernos hay?':['9','2','10','400','13']},
     {'¿Que es el cacao?':['Un regalo de los dioses','Un dulce','La eternidad','una ofrenda al sacerdote','el corazón de la ciudad']},
     {'¿Que ave criamos?':['guajolot','pez','gallina','cerdo','aguila',]},
-    {'¿Que rango obtiene un guerrero cuando captura a su primer enemigo?':['Tlamani','Cabo','Cabotl','Xomotl','Acamapichtli',]}
+    {'¿Que rango obtiene un guerrero cuando captura a su primer enemigo?':['Tlamani','Cabo','Cabotl','Xomotl','Acamapichtli',]},
+    {'¿Como se llama el gorro que reciben nuestros guerreros despues de su segunda captura?': ['Tlahuizil','tequiha','cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl',],},
+    {'¿Cómo se llaman los guerreros flecha?': ['Tequihua','Cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli',],},
+    {'¿Cómo se le dice a los guerreros águila?': ['Cuauhpilli','Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua',],},
+    {'¿Cómo se le dice a los guerreros jaguar?': ['Ocelopipiltin','Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua','Cuauhpilli',],},
+    {'¿Cómo se le llama a un guerrero rapado?': ['Quachicqueh','tlacochcalcatl','tlahuizli','Tequihua','Cuauhpilli','Ocelopipiltin',],},
+    {'¿Cuál es nuestra arma favorita?': ['Maquahuitl','Teputzopilli','Quauhololli','Tematlatl','Átlatl','Tlahuitolli',],},
+    {'¿Qué arma larga tenemos?': ['Teputzopilli','Quauhololli','Tematlatl','Átlatl','Tlahuitolli','Maquahuitl',],},
+    {'¿Qué arma de larga distancia usamos?': ['Tlahuitolli','Teputzopilli','Quauhololli','Tematlatl','Átlatl','Maquahuitl',],},
+    {'¿Cómo se llama el dios de la música y la danza?': ['Ozomatli','Xochiquetzal','Huitzilopochi','Tezcatlipoca','Xipe Totec','Chalchiuhtlique',],},
+    {'¿Cómo se llama el dios de la muerte?': ['Mictlantechuhtli','Ozomatli','Xochiquetzal','Huitzilopochi','Tezcatlipoca','Xipe Totec',],}
   ]};
