@@ -263,7 +263,7 @@ function requestName(handlerInput) {
    const AudioInicio = "<audio src='soundbank://soundlibrary/machines/power_up_down/power_up_down_10'/>"
   +"<audio src='soundbank://soundlibrary/explosions/electrical/electrical_04'/>"
   +"<audio src='soundbank://soundlibrary/water/nature/nature_10'/>"
-  + "Hola viajero, soy alexa tu IA,"
+  + "Hola viajero, soy alexa tu I <break time='100ms'/> A,"
   + "<break time='500ms'/>"
   + "<audio src='soundbank://soundlibrary/animals/amzn_sfx_bird_robin_chirp_1x_01'/>"
   + "me temo que el viaje en el tiempo no salio como esperamos, y terminamos varados en la antigua ciudad mexica "
@@ -299,11 +299,11 @@ const RegisterNameIntentHandler = {
     
     sessionAttributes['name'] = name;
     const speechText = "Cierto " + name + " como lo pude olvidar!"
-    +"<break time='500ms'/>"
-   +  "<audio src='soundbank://soundlibrary/footsteps/wood/wood_05'/>"
-   + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿marica? </prosody></prosody></voice>"
+  +"<break time='500ms'/>"
+  + "<audio src='soundbank://soundlibrary/footsteps/wood/wood_05'/>"
+  + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿marica? </prosody></prosody></voice>"
   + "<break time='1s'/>"
-  + "Vaya parece que es Tezcatlipoca  el gran sacerdote, quiere saber quien eres y si eres amigo o <break time='500ms'/> enemigo<break time='500ms'/>"
+  + "¡Vaya parece que es Tezcatlipoca!, el gran sacerdote, quiere saber quien eres y si eres amigo <break time='500ms'/> o <break time='500ms'/> enemigo<break time='500ms'/>"
   + "<amazon:effect name='whispered'> creo que no nos conviene ser enemigo, no les va muy bien, o eso tengo en mis registros </amazon:effect>"
   + "<break time='500ms'/>"
   + "Entonces, ¿qué le digo que eres?" 
@@ -312,7 +312,7 @@ const RegisterNameIntentHandler = {
     
     return responseBuilder
       .speak(speechText)
-      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .withSimpleCard(requestAttributes.t('speechText'), speechText)
       .getResponse(); 
   }
 };  
@@ -359,8 +359,10 @@ function startGame(newGame, handlerInput) {
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
   const name = sessionAttributes['name'];
   let speechOutput = newGame
-    ? requestAttributes.t('NEW_GAME_MESSAGE', name)
-      + requestAttributes.t('WELCOME_MESSAGE', GAME_LENGTH.toString())
+    ? requestAttributes.t(' <voice name="Enrique"><prosody pitch="high"><prosody volume="x-loud">nepatlalistli tekipanoa yoli tlania tetlamolistli tlatlani temachyotl tlauaualoni tetlajtolana melauak tlatlani makuili xomotl chikome immanyotl tetlapolotia olinmitl ka chachamekatli</prosody></prosody></voice>') 
+      + requestAttributes.t('<break time="1s"/> Dice que no confia en nosotros pero por ahora ser amigo bastara para mantenerte vivo, <break time="1s"/> nos hara unas pruebas para determinar si somos de confianza o no.')
+      + requestAttributes.t('<prosody volume="loud"> Las reglas para sobrevivir es contestar correctamente 5 preguntas y conseguir 5 Xomotl,<break time="1s"/> tendremos 7 oportunidades<prosody volume="x-loud"> al final<break time="1s"/> se te hara un juicio.</prosody> </prosody>')
+      + requestAttributes.t('<break time="1s"/> ¿Recuerdas la cultura Azteca cierto?.<break time="1s"/> Para poder continuar mejor, yo traducire ahora en adelante. ¿Estas Listo %s?', name)
     : '';
   const translatedQuestions = requestAttributes.t('QUESTIONS');
   const gameQuestions = populateGameQuestions(translatedQuestions);
@@ -381,8 +383,8 @@ function startGame(newGame, handlerInput) {
     answersScreen += `${i + 1}. ${roundAnswers[i]} <br>`
   }
 
-  speechOutput += repromptText;
   const _sessionAttributes = {};
+  speechOutput += repromptText;
 
   const translatedQuestion = translatedQuestions[gameQuestions[currentQuestionIndex]];
 
