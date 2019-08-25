@@ -121,7 +121,7 @@
                     ]
                 },
                 {
-                    "name": "gameIntent",
+                    "name": "GameIntent",
                     "slots": [],
                     "samples": [
                         "salvar el halo",
@@ -136,7 +136,7 @@
                     ]
                 },
                 {
-                    "name": "moreInfoIntent",
+                    "name": "MoreInfoIntent",
                     "slots": [],
                     "samples": [
                         "informe",
