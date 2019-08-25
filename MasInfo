@@ -35,7 +35,6 @@
 +"el náhuatl. "
 +"<audio src="soundbank://soundlibrary/battle/amzn_sfx_battle_yells_men_01"/>"
 
-
 +"<break time = '1s'/>
 
 +"En esta cultura, el Tlatoani era el"
@@ -63,7 +62,7 @@
 +"<audio src="soundbank://soundlibrary/wood/moves/moves_02"/>"
 +"<audio src="soundbank://soundlibrary/voices/crowds/crowds_10"/>"
 
-
+<break time = '1s'/>
 
 +"La economía de los aztecas se basaba"
 +"en la pesca, la caza, el cultivo del"
@@ -80,7 +79,7 @@
 +"Su sistema de compra venta era el "
 +"trueque en los mercados. "
 
-
+<break time = '1s'/>
 
 +"<audio src="soundbank://soundlibrary/voices/chorus/chorus_02"/>"
 +"En cuanto a la religión, los aztecas "
@@ -101,3 +100,39 @@
 +"<break time = '0.3s'/> y "
 +"Coatlicue, la diosa madre. "
 +"<audio src="soundbank://soundlibrary/voices/chorus/chorus_12"/>"
+
+<break time = '1s'/>
+
++"En 1519, Hernán Cortés, desobedeciendo"
++"las órdenes expresas del gobernador de "
++"Cuba, llegó a la costa de México con "
++"aproximadamente 450 soldados. "
++"<break time = '0.5s'/>"
++"En el año 1520, lograron entrar a la capital del"
++"imperio y que el máximo gobernante de "
++"Tenochtitlán, Cuauhtémoc, se declarara"
++"vasallo del emperador Carlos V. "
++"<break time = '0.5s'/>"
++"De esta manera, todas las tierras pasaron"
++"a ser propiedad de la Corona de Castilla. "
++"<break time = '0.5s'/>"
++"El 29 de Junio de 1520, tras perder"
++"toda esperanza en él, los aztecas "
++"acabaron con la vida de su emperador."
++"<break time = '0.5s'/>"
++"Durante el resto de 1520 y gran "
++"parte de 1521, los castellanos fueron "
++"tomando el control de todos los "
++"pueblos y ciudades controlados por "
++"los mexicas, hasta bloquear las "
++"salidas de la ciudad lago. "
++"<break time = '1.1s'/>"
++"Es así como en el año 1521 encontramos "
++"el final de uno de los imperios más "
++"importantes de América. "
++"<break time = '0.5s'/>"
++"<audio src="soundbank://soundlibrary/explosions/fire/fire_03"/>"
+
+
+
+
