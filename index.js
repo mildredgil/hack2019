@@ -21,6 +21,7 @@ const languageString = {
     translation: {
       QUESTIONS: questions.QUESTIONS_ES_MX,
       GAME_NAME: 'Conociendo mis raices',
+      MENU_MESSAGE: 'Para iniciar la historia di Jugar. Para conocer más sobre la cultura Mexica di Más información. Para salir del Juego di Salir. ¿Que deseas hacer?',
       HELP_MESSAGE: 'Te haré %s preguntas de opción múltiple. Responde con el número de la respuesta. Para iniciar un juego nuevo di, comenzar juego. ¿Cómo te puedo ayudar?',
       REPEAT_QUESTION_MESSAGE: 'Para repetir la última pregunta dime: repíte',
       ASK_MESSAGE_START: 'Te gustaría comenzar a jugar?',
@@ -221,6 +222,52 @@ function handleUserGuess(userGaveUp, handlerInput) {
     .getResponse();
 }
 
+function menuGame(newGame, handlerInput) {
+  const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+  let speechText = newGame
+    ? requestAttributes.t('NEW_GAME_MESSAGE', requestAttributes.t('GAME_NAME'))
+      + requestAttributes.t('MENU_MESSAGE', GAME_LENGTH.toString())
+    : '';
+
+  return handlerInput.responseBuilder
+  .speak(speechText)
+  .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+  .getResponse();
+}
+
+const GameIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'GameIntent';
+  },
+  handle(handlerInput) {
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = "Amazon AI.";
+
+    return startGame(true, handlerInput);
+    /*return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse();*/
+  },
+};
+
+const MoreInfoIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'MoreInfoIntent';
+  },
+  handle(handlerInput) {
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = "Mas información";
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse();
+  },
+};
+
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   let speechOutput = newGame
@@ -317,7 +364,7 @@ const LaunchRequest = {
         && request.intent.name === 'AMAZON.StartOverIntent');
   },
   handle(handlerInput) {
-    return startGame(true, handlerInput);
+    return menuGame(true, handlerInput);
   },
 };
 
@@ -499,6 +546,8 @@ exports.handler = skillBuilder
     NoIntent,
     SessionEndedRequest,
     FallbackHandler,
+    GameIntentHandler,
+    MoreInfoIntentHandler,
     UnhandledIntent
   )
   .addRequestInterceptors(LocalizationInterceptor)
