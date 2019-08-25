@@ -187,6 +187,27 @@
                         "soy amigo",
                         "Amigo"
                     ]
+                },
+                {
+                    "name": "ContinueMoreInfoIntent",
+                    "slots": [],
+                    "samples": [
+                        "continuar mas info",
+                        "continuar con mas info",
+                        "continuar aprendiendo por favor",
+                        "continuar aprendiendo"
+                    ]
+                },
+                {
+                    "name": "MenuIntent",
+                    "slots": [],
+                    "samples": [
+                        "reproduce el menu",
+                        "abrir menu",
+                        "ver menu",
+                        "ir a menu",
+                        "regresar al menu"
+                    ]
                 }
             ],
             "types": []
