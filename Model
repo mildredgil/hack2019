@@ -119,6 +119,56 @@
                         "lo que sea",
                         "a {anything}"
                     ]
+                },
+                {
+                    "name": "gameIntent",
+                    "slots": [],
+                    "samples": [
+                        "salvar el halo",
+                        "juguemos",
+                        "iniciar la aventura",
+                        "iniciar",
+                        "comenzar la campaña",
+                        "juego",
+                        "iniciar juego",
+                        "empezar",
+                        "jugar"
+                    ]
+                },
+                {
+                    "name": "moreInfoIntent",
+                    "slots": [],
+                    "samples": [
+                        "informe",
+                        "cortana informe",
+                        "saber mas de nahuatl",
+                        "educame",
+                        "dame mas",
+                        "aprender mas",
+                        "saber de mi cultura",
+                        "cuentame mas",
+                        "conocer mas",
+                        "saber mas",
+                        "mas",
+                        "mas informacion"
+                    ]
+                },
+                {
+                    "name": "exitIntent",
+                    "slots": [],
+                    "samples": [
+                        "sal de ahi soldado",
+                        "he salvado el halo",
+                        "piece out",
+                        "mision completada",
+                        "gracias",
+                        "grax",
+                        "terminar partida",
+                        "adios Xomotl",
+                        "salir",
+                        "bye",
+                        "adios"
+                    ]
                 }
             ],
             "types": []
