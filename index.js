@@ -14,6 +14,7 @@ const sprintf = require('i18next-sprintf-postprocessor');
 var persistenceAdapter = getPersistenceAdapter();
 
 const ANSWER_COUNT = 4;
+const ANSWER_MIN_TO_WIN = 5;
 const GAME_LENGTH = 7;
 const SKILL_NAME = 'Conociendo mis raices';
 const FALLBACK_MESSAGE = 'Recuerda, que dependemos de que respondas con el número de tu respuesta correctament. Dime repite para volver a preguntarte o puedes iniciar un juego nuevo. ¿Cómo te puedo ayudar?';
@@ -181,7 +182,8 @@ function handleUserGuess(userGaveUp, handlerInput) {
     );
   }
 
-  if(currentScore < 5 && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+  //End of game
+  if(currentScore < ANSWER_MIN_TO_WIN && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
     speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
     speechOutput += speechOutputAnalysis + requestAttributes.t(
       'GAME_OVER_LOSS_MESSAGE',
@@ -208,9 +210,10 @@ function handleUserGuess(userGaveUp, handlerInput) {
 
     return responseBuilder
       .speak(speechOutput)
-    //agregar pantalla ganaste
+      .withShouldEndSession(true)
       .getResponse();
-  } else if(currentScore >= 5 && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+      
+  } else if(currentScore >= ANSWER_MIN_TO_WIN && sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
     speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
     speechOutput += speechOutputAnalysis + requestAttributes.t(
       'GAME_OVER_WIN_MESSAGE',
@@ -237,24 +240,11 @@ function handleUserGuess(userGaveUp, handlerInput) {
 
     return responseBuilder
       .speak(speechOutput)
-    //agregar pantalla ganaste
+      .withShouldEndSession(true)
       .getResponse();
   }
 
-  // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
-  /*if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
-    speechOutput = userGaveUp ? '' : requestAttributes.t('ANSWER_IS_MESSAGE');
-    speechOutput += speechOutputAnalysis + requestAttributes.t(
-      'GAME_OVER_MESSAGE',
-      currentScore.toString(),
-      GAME_LENGTH.toString()
-    );
-    return responseBuilder
-      .speak(speechOutput)
-    //agregar pantalla ganaste
-      .getResponse();
-  }*/
-
+  //get next question
   currentQuestionIndex += 1;
   correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
   const spokenQuestion = Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0];
@@ -314,6 +304,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
   } else {
     return responseBuilder.speak(speechOutput)
       .reprompt(repromptText)
+      .withShouldEndSession(false)
       .getResponse();
   }
   
@@ -330,6 +321,7 @@ function menuGame(newGame, handlerInput) {
     return handlerInput.responseBuilder
     .speak(speechText)
     .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+    .withShouldEndSession(false)
     .addDirective({
       type: 'Alexa.Presentation.APL.RenderDocument',
       version: '1.0',
@@ -344,6 +336,7 @@ function menuGame(newGame, handlerInput) {
   } else{
     return handlerInput.responseBuilder
     .speak(speechText)
+    .withShouldEndSession(false)
     .getResponse();
   }
   
@@ -371,173 +364,9 @@ function requestName(handlerInput) {
           confirmationStatus: 'NONE',
           slots: {}
       })
+        .withShouldEndSession(false)
         .getResponse();
 }
-
-const RegisterNameIntentHandler = {
-  canHandle(handlerInput) {
-      return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-          && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RegisterNameIntent';
-  },
-  handle(handlerInput) {
-    // the attributes manager allows us to access session attributes
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const {attributesManager, requestEnvelope, responseBuilder} = handlerInput;
-    const sessionAttributes = attributesManager.getSessionAttributes();
-    
-    const name = Alexa.getSlotValue(requestEnvelope, 'name');
-    
-    sessionAttributes['name'] = name;
-    const speechText = "Cierto " + name + " como lo pude olvidar!"
-  +"<break time='500ms'/>"
-  + "<audio src='soundbank://soundlibrary/footsteps/wood/wood_05'/>"
-  + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿yaotl? </prosody></prosody></voice>"
-  + "<break time='1s'/>"
-  + "¡Vaya parece que es Tezcatlipoca!, el gran sacerdote, quiere saber quien eres y si eres amigo <break time='500ms'/> o <break time='500ms'/> enemigo<break time='500ms'/>"
-  + "<amazon:effect name='whispered'> creo que no nos conviene ser enemigo, no les va muy bien, o eso tengo en mis registros </amazon:effect>"
-  + "<break time='500ms'/>"
-  + "Entonces, ¿qué le digo que eres?" 
-    
-    ;
-    
-    return responseBuilder
-      .speak(speechText)
-      .withSimpleCard(requestAttributes.t('speechText'), speechText)
-      .getResponse(); 
-  }
-};  
-
-const FriendIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FriendIntent'
-        || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
-          && handlerInput.requestEnvelope.request.arguments.length > 0
-          && handlerInput.requestEnvelope.request.arguments[0] === 'jugar');
-  },
-  handle(handlerInput) {
-    // the attributes manager allows us to access session attributes
-    return startGame(true, handlerInput);
-  }
-};
-
-const GameIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent';
-  },
-  handle(handlerInput) {
-    return requestName(handlerInput);    
-  },
-};
-
-
-const DisplayPointsIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'DisplayPointsIntent'
-  },
-  handle(handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    let speechText = "";
-
-  if(sessionAttributes.puntuaciones.length > 0) {
-    sessionAttributes.puntuaciones.forEach(puntaje => {
-      speechText += "nombre " + puntaje.nombre +
-      " .Puntos " + puntaje.puntuacion
-    });
-  } else {
-    speechText = "No hay puntajes registrados";
-  }
-    
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .getResponse();
-  },
-};
-
-const CleanPointsIntentHandler = {
-  canHandle(handlerInput) {
-      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'CleanPointsIntent'
-  },
-  handle(handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    sessionAttributes['puntuaciones'] = [];
-    const speechText = "Borrado";
-    
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .getResponse();
-  },
-};
-
-const MoreInfoIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'MoreInfoIntent'
-      || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
-          && handlerInput.requestEnvelope.request.arguments.length > 0
-          && handlerInput.requestEnvelope.request.arguments[0] === 'mas informacion');
-  },
-  handle(handlerInput) {
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = info.intro;
-
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-      .getResponse();
-  },
-};
-
-const ContinueMoreInfoIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ContinueMoreInfoIntent';
-  },
-  handle(handlerInput) {
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = info.conclusion;
-
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-      .getResponse();
-  },
-};
-
-const MenuIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'MenuIntent';
-  },
-  handle(handlerInput) {
-
-    return menuGame(true, handlerInput);
-  },
-};
-
-const ImEnemyIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'ImEnemyIntent';
-  },
-  handle(handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    let name = sessionAttributes.name;
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechText = requestAttributes.t(
-      'GAME_OVER_ENEMY_MESSAGE',
-      name
-    );
-
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-      .getResponse();
-  },
-};
 
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
@@ -609,6 +438,7 @@ function startGame(newGame, handlerInput) {
     return handlerInput.responseBuilder
     .speak(speechOutput)
     .reprompt(repromptText)
+    .withSimpleCard(requestAttributes.t('GAME_NAME'), repromptText)
     .getResponse();
   }
   
@@ -622,7 +452,177 @@ function helpTheUser(newGame, handlerInput) {
   const speechOutput = requestAttributes.t('HELP_MESSAGE', GAME_LENGTH) + askMessage;
   const repromptText = requestAttributes.t('HELP_REPROMPT') + askMessage;
 
-  return handlerInput.responseBuilder.speak(speechOutput).reprompt(repromptText).getResponse();
+  return handlerInput.responseBuilder
+    .speak(speechOutput)
+    .reprompt(repromptText)
+    .getResponse();
+};
+
+const RegisterNameIntentHandler = {
+  canHandle(handlerInput) {
+      return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+          && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RegisterNameIntent';
+  },
+  handle(handlerInput) {
+    // the attributes manager allows us to access session attributes
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const {attributesManager, requestEnvelope, responseBuilder} = handlerInput;
+    const sessionAttributes = attributesManager.getSessionAttributes();
+    
+    const name = Alexa.getSlotValue(requestEnvelope, 'name');
+    
+    sessionAttributes['name'] = name;
+    const speechText = "Cierto " + name + " como lo pude olvidar!"
+  +"<break time='500ms'/>"
+  + "<audio src='soundbank://soundlibrary/footsteps/wood/wood_05'/>"
+  + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿yaotl? </prosody></prosody></voice>"
+  + "<break time='1s'/>"
+  + "¡Vaya parece que es Tezcatlipoca!, el gran sacerdote, quiere saber quien eres y si eres amigo <break time='500ms'/> o <break time='500ms'/> enemigo<break time='500ms'/>"
+  + "<amazon:effect name='whispered'> creo que no nos conviene ser enemigo, no les va muy bien, o eso tengo en mis registros </amazon:effect>"
+  + "<break time='500ms'/>"
+  + "Entonces, ¿qué le digo que eres?" 
+    
+    ;
+    
+    return responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('speechText'), speechText)
+      .withShouldEndSession(false)
+      .getResponse(); 
+  }
+};  
+
+const FriendIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'FriendIntent'
+        || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'jugar');
+  },
+  handle(handlerInput) {
+    // the attributes manager allows us to access session attributes
+    return startGame(true, handlerInput);
+  }
+};
+
+const GameIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent';
+  },
+  handle(handlerInput) {
+    return requestName(handlerInput);    
+  },
+};
+
+const DisplayPointsIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'DisplayPointsIntent'
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    let speechText = "";
+
+  if(sessionAttributes.puntuaciones.length > 0) {
+    sessionAttributes.puntuaciones.forEach(puntaje => {
+      speechText += "nombre " + puntaje.nombre +
+      ". Puntos " + puntaje.puntuacion
+    });
+  } else {
+    speechText = "No hay puntajes registrados";
+  }
+    
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .getResponse();
+  },
+};
+
+const CleanPointsIntentHandler = {
+  canHandle(handlerInput) {
+      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'CleanPointsIntent'
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes['puntuaciones'] = [];
+    const speechText = "Borrado";
+    
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .getResponse();
+  },
+};
+
+const MoreInfoIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'MoreInfoIntent'
+      || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'mas informacion');
+  },
+  handle(handlerInput) {
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = info.intro;
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .getResponse();
+  },
+};
+
+const ContinueMoreInfoIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ContinueMoreInfoIntent';
+  },
+  handle(handlerInput) {
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = info.conclusion;
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .withShouldEndSession(false)
+      .getResponse();
+  },
+};
+
+const MenuIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'MenuIntent';
+  },
+  handle(handlerInput) {
+
+    return menuGame(true, handlerInput);
+  },
+};
+
+const ImEnemyIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'ImEnemyIntent';
+  },
+  handle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    let name = sessionAttributes.name;
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = requestAttributes.t(
+      'GAME_OVER_ENEMY_MESSAGE',
+      name
+    );
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .withShouldEndSession(true)
+      .getResponse();
+  },
 };
 
 const LocalizationInterceptor = {
@@ -742,6 +742,7 @@ const RepeatIntent = {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     return handlerInput.responseBuilder.speak(sessionAttributes.speechOutput)
       .reprompt(sessionAttributes.repromptText)
+      .withShouldEndSession(false)
       .getResponse();
   },
 };
@@ -772,6 +773,7 @@ const StopIntent = {
     const speechOutput = requestAttributes.t('STOP_MESSAGE');
 
     return handlerInput.responseBuilder.speak(speechOutput)
+      .withShouldEndSession(true)
       .reprompt(speechOutput)
       .getResponse();
   },
@@ -786,8 +788,10 @@ const CancelIntent = {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
     const speechOutput = requestAttributes.t('CANCEL_MESSAGE');
 
-    return handlerInput.responseBuilder.speak(speechOutput)
-      .getResponse();
+    return handlerInput.responseBuilder
+        .speak(speechOutput)
+        .withShouldEndSession(true)
+        .getResponse();
   },
 };
 
@@ -799,7 +803,10 @@ const NoIntent = {
   handle(handlerInput) {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
     const speechOutput = requestAttributes.t('NO_MESSAGE');
-    return handlerInput.responseBuilder.speak(speechOutput).getResponse();
+    return handlerInput.responseBuilder
+        .speak(speechOutput)
+        .withShouldEndSession(true)
+        .getResponse();
   },
 };
 
