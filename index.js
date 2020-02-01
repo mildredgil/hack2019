@@ -249,7 +249,6 @@ function handleUserGuess(userGaveUp, handlerInput) {
       currentScore.toString(),
       GAME_LENGTH.toString()
     );
-
     return responseBuilder
       .speak(speechOutput)
     //agregar pantalla ganaste
@@ -297,20 +296,27 @@ function handleUserGuess(userGaveUp, handlerInput) {
     puntuaciones: sessionAttributes['puntuaciones'],
   });
 
-  return responseBuilder.speak(speechOutput)
-    .reprompt(repromptText)
-    .addDirective({
-        type: 'Alexa.Presentation.APL.RenderDocument',
-        version: '1.0',
-        document: require('./questionAPL.json'),
-        datasources: {
-            "docdata": {
-                "question": spokenQuestion,
-                "answer": answersScreen
-            }
-        }
-    })
-    .getResponse();
+  if (supportsAPL(handlerInput)) {
+    return responseBuilder.speak(speechOutput)
+      .reprompt(repromptText)
+      .addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          version: '1.0',
+          document: require('./questionAPL.json'),
+          datasources: {
+              "docdata": {
+                  "question": spokenQuestion,
+                  "answer": answersScreen
+              }
+          }
+      })
+      .getResponse();
+  } else {
+    return responseBuilder.speak(speechOutput)
+      .reprompt(repromptText)
+      .getResponse();
+  }
+  
 }
 
 function menuGame(newGame, handlerInput) {
@@ -320,20 +326,27 @@ function menuGame(newGame, handlerInput) {
       + requestAttributes.t('MENU_MESSAGE', GAME_LENGTH.toString())
     : '';
 
-  return handlerInput.responseBuilder
-  .speak(speechText)
-  .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-  .addDirective({
-    type: 'Alexa.Presentation.APL.RenderDocument',
-    version: '1.0',
-    document: require('./menuAPL.json'),
-    datasources: {
-        'docdata': {
-            "menu": speechText
-        }
-    }
-  })
-  .getResponse();
+  if (supportsAPL(handlerInput)) {
+    return handlerInput.responseBuilder
+    .speak(speechText)
+    .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+    .addDirective({
+      type: 'Alexa.Presentation.APL.RenderDocument',
+      version: '1.0',
+      document: require('./menuAPL.json'),
+      datasources: {
+          'docdata': {
+              "menu": speechText
+          }
+      }
+    })
+    .getResponse();
+  } else{
+    return handlerInput.responseBuilder
+    .speak(speechText)
+    .getResponse();
+  }
+  
 }
 
 function requestName(handlerInput) {
@@ -378,7 +391,7 @@ const RegisterNameIntentHandler = {
     const speechText = "Cierto " + name + " como lo pude olvidar!"
   +"<break time='500ms'/>"
   + "<audio src='soundbank://soundlibrary/footsteps/wood/wood_05'/>"
-  + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿marica? </prosody></prosody></voice>"
+  + "<voice name='Enrique'><prosody pitch='high'><prosody volume='x-loud'>TLEN TEHUATL?, Ihuān teh, ¿quen motōcā?, ¿icniuhtli?, ¿yaotl? </prosody></prosody></voice>"
   + "<break time='1s'/>"
   + "¡Vaya parece que es Tezcatlipoca!, el gran sacerdote, quiere saber quien eres y si eres amigo <break time='500ms'/> o <break time='500ms'/> enemigo<break time='500ms'/>"
   + "<amazon:effect name='whispered'> creo que no nos conviene ser enemigo, no les va muy bien, o eso tengo en mis registros </amazon:effect>"
@@ -406,7 +419,7 @@ const FriendIntentHandler = {
     // the attributes manager allows us to access session attributes
     return startGame(true, handlerInput);
   }
-}
+};
 
 const GameIntentHandler = {
   canHandle(handlerInput) {
@@ -441,7 +454,7 @@ const DisplayPointsIntentHandler = {
       .speak(speechText)
       .getResponse();
   },
-}
+};
 
 const CleanPointsIntentHandler = {
   canHandle(handlerInput) {
@@ -457,7 +470,7 @@ const CleanPointsIntentHandler = {
       .speak(speechText)
       .getResponse();
   },
-}
+};
 
 const MoreInfoIntentHandler = {
   canHandle(handlerInput) {
@@ -524,7 +537,7 @@ const ImEnemyIntentHandler = {
       .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
       .getResponse();
   },
-}
+};
 
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
@@ -575,7 +588,8 @@ function startGame(newGame, handlerInput) {
 
   handlerInput.attributesManager.setSessionAttributes(_sessionAttributes);
 
-  return handlerInput.responseBuilder
+  if (supportsAPL(handlerInput)) {
+    return handlerInput.responseBuilder
     .speak(speechOutput)
     .reprompt(repromptText)
     .withSimpleCard(requestAttributes.t('GAME_NAME'), repromptText)
@@ -591,7 +605,14 @@ function startGame(newGame, handlerInput) {
         }
     })
     .getResponse();
-}
+  } else {
+    return handlerInput.responseBuilder
+    .speak(speechOutput)
+    .reprompt(repromptText)
+    .getResponse();
+  }
+  
+};
 
 function helpTheUser(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
@@ -602,7 +623,7 @@ function helpTheUser(newGame, handlerInput) {
   const repromptText = requestAttributes.t('HELP_REPROMPT') + askMessage;
 
   return handlerInput.responseBuilder.speak(speechOutput).reprompt(repromptText).getResponse();
-}
+};
 
 const LocalizationInterceptor = {
   process(handlerInput) {
@@ -632,7 +653,6 @@ const LaunchRequest = {
     return menuGame(true, handlerInput);
   },
 };
-
 
 const HelpIntent = {
   canHandle(handlerInput) {
@@ -742,7 +762,6 @@ const YesIntent = {
   },
 };
 
-
 const StopIntent = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -826,6 +845,12 @@ const SaveAttributesResponseInterceptor = {
           await attributesManager.savePersistentAttributes();
       }
   }
+};
+
+function supportsAPL(handlerInput) {
+  const supportedInterfaces = handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
+  const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
+  return aplInterface !== null && aplInterface !== undefined;
 };
 
 const skillBuilder = Alexa.SkillBuilders.custom();

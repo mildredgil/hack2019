@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "conociendo mis raices",
+            "invocationName": "conociendo mis raíces",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -13,7 +13,15 @@
                 },
                 {
                     "name": "AMAZON.StopIntent",
-                    "samples": []
+                    "samples": [
+                        "salir a dios",
+                        "adios quiero salir",
+                        "adios salir",
+                        "adios me voy",
+                        "adios cuidate",
+                        "adios",
+                        "adios amigo"
+                    ]
                 },
                 {
                     "name": "AnswerIntent",
@@ -35,14 +43,14 @@
                     "name": "DontKnowIntent",
                     "slots": [],
                     "samples": [
-                        "no se ",
-                        "no lo se",
+                        "no sé ",
+                        "no lo seé",
                         "sepa",
                         "sepa la bola",
                         "ni idea",
                         "no tengo idea",
                         "quien sabe",
-                        "esta no la se"
+                        "esta no la sé"
                     ]
                 },
                 {
@@ -132,11 +140,11 @@
                     "name": "GameIntent",
                     "slots": [],
                     "samples": [
-                        "salvar el halo",
+                        "para jugar",
+                        "quiero jugar",
                         "juguemos",
                         "iniciar la aventura",
                         "iniciar",
-                        "comenzar la campaña",
                         "juego",
                         "iniciar juego",
                         "empezar",
@@ -147,18 +155,18 @@
                     "name": "MoreInfoIntent",
                     "slots": [],
                     "samples": [
-                        "informe",
+                        "informame",
+                        "más información",
                         "cortana informe",
-                        "saber mas de nahuatl",
+                        "saber más de nahuatl",
                         "educame",
-                        "dame mas",
-                        "aprender mas",
+                        "dame más",
+                        "aprender más",
                         "saber de mi cultura",
-                        "cuentame mas",
-                        "conocer mas",
-                        "saber mas",
-                        "mas",
-                        "mas informacion"
+                        "cuentame más",
+                        "conocer más",
+                        "saber más",
+                        "mas"
                     ]
                 },
                 {
@@ -204,8 +212,9 @@
                     "name": "ContinueMoreInfoIntent",
                     "slots": [],
                     "samples": [
-                        "continuar mas info",
-                        "continuar con mas info",
+                        "continuar más info",
+                        "continuar con más info",
+                        "continuar con más información",
                         "continuar aprendiendo por favor",
                         "continuar aprendiendo"
                     ]
@@ -227,7 +236,6 @@
                     "samples": [
                         "enemigo tuyo",
                         "yo soy el enemigo",
-                        "no soy amigo",
                         "enemigo",
                         "soy enemigo"
                     ]
@@ -239,7 +247,8 @@
                         "tabla de puntuaciones",
                         "puntuaciones",
                         "mostrar puntuaciones",
-                        "ver puntuaciones"
+                        "ver puntuaciones",
+                        "abre puntuaciones"
                     ]
                 }
             ],
