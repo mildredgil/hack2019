@@ -14,6 +14,7 @@
                 {
                     "name": "AMAZON.StopIntent",
                     "samples": [
+                        "salir",
                         "salir a dios",
                         "adios quiero salir",
                         "adios salir",
@@ -174,13 +175,8 @@
                     "slots": [
                         {
                             "name": "name",
-                            "type": "AMAZON.StreetName",
+                            "type": "AMAZON.FirstName",
                             "samples": [
-                                "guarda {name}",
-                                "registra {name}",
-                                "es  {name}",
-                                "mi nombre es {name}",
-                                "me llamo {name}",
                                 "{name}"
                             ]
                         }
@@ -263,7 +259,7 @@
                     "slots": [
                         {
                             "name": "name",
-                            "type": "AMAZON.StreetName",
+                            "type": "AMAZON.FirstName",
                             "confirmationRequired": false,
                             "elicitationRequired": true,
                             "prompts": {
@@ -282,6 +278,15 @@
                     {
                         "type": "PlainText",
                         "value": " ¿Puedes recordarme tu nombre?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.643627470087.1363476362558",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "tu nombre es {name} cierto?"
                     }
                 ]
             }
