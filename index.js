@@ -25,11 +25,13 @@ const languageString = {
     translation: {
       QUESTIONS: questions.QUESTIONS_ES_MX,
       GAME_NAME: 'Conociendo mis raices',
-      MENU_MESSAGE: 'Para iniciar la historia di Jugar. Para conocer más sobre la cultura Mexica di Más información. Para salir del Juego di Salir. ¿Que deseas hacer?',
+      MENU_MESSAGE: 'Para iniciar la historia di Jugar. Para conocer más sobre la cultura Mexica di Más información. Para salir del Juego di Salir. Para borrar puntaje di Limpiar Puntos.',
       HELP_MESSAGE: 'Te haré %s preguntas de opción múltiple. Responde con el número de la respuesta. Para iniciar un juego nuevo di, comenzar juego. ¿Cómo te puedo ayudar?',
       REPEAT_QUESTION_MESSAGE: 'Para repetir la última pregunta dime: repíte',
+      ASK_MESSAGE: '¿Que deseas hacer?',
       ASK_MESSAGE_START: 'Te gustaría comenzar a jugar?',
       HELP_REPROMPT: 'Para responder simplemente dime el número de tu respuesta',
+      POINT_UNREGISTER: 'No hay puntajes registrados',
       STOP_MESSAGE: '¿Quieres seguir jugando?',
       CANCEL_MESSAGE: 'Ok, jugaremos en otra ocasión',
       NO_MESSAGE: 'Ok, regresa pronto. ¡Adios!',
@@ -47,7 +49,9 @@ const languageString = {
       GAME_OVER_WIN_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. HAZ GANADO! Sobreviviremos %s. HURRA! ... Creo que mi sistema se arreglo, ya podemos Regresar a casa, ufff, que alivio.',
       GAME_OVER_LOSS_MESSAGE: 'Has obtenido %s respuestas correctas de %s preguntas. Oh oh, este es el fin, fue un gusto conocerte %s, no soy fan de los sacrificios...',
       GAME_OVER_ENEMY_MESSAGE: 'Un pequeñito consejo %s,  ¡CORREEEEEEE!.                 FIN.',
-      SCORE_IS_MESSAGE: 'Tu puntuación es %s XOMOTL. '
+      SCORE_IS_MESSAGE: 'Tu puntuación es %s XOMOTL. ',
+      HAS: 'tiene',
+      POINTS: 'puntos'
     },
   },
   'es-es': {
@@ -300,6 +304,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
               }
           }
       })
+      .withShouldEndSession(false)
       .getResponse();
   } else {
     return responseBuilder.speak(speechOutput)
@@ -315,13 +320,13 @@ function menuGame(newGame, handlerInput) {
   let speechText = newGame
     ? requestAttributes.t('NEW_GAME_MESSAGE', requestAttributes.t('GAME_NAME'))
       + requestAttributes.t('MENU_MESSAGE', GAME_LENGTH.toString())
+      + requestAttributes.t('ASK_MESSAGE', GAME_LENGTH.toString())
     : '';
 
   if (supportsAPL(handlerInput)) {
     return handlerInput.responseBuilder
     .speak(speechText)
     .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
-    .withShouldEndSession(false)
     .addDirective({
       type: 'Alexa.Presentation.APL.RenderDocument',
       version: '1.0',
@@ -332,6 +337,7 @@ function menuGame(newGame, handlerInput) {
           }
       }
     })
+    .withShouldEndSession(false)
     .getResponse();
   } else{
     return handlerInput.responseBuilder
@@ -525,18 +531,24 @@ const DisplayPointsIntentHandler = {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     let speechText = "";
 
+  const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+
   if(sessionAttributes.puntuaciones.length > 0) {
     sessionAttributes.puntuaciones.forEach(puntaje => {
-      speechText += "nombre " + puntaje.nombre +
-      ". Puntos " + puntaje.puntuacion
+        if(puntaje.nombre !== "") {
+            speechText += puntaje.nombre + requestAttributes.t('HAS') + puntaje.puntuacion + requestAttributes.t('POINTS')      
+        }
     });
   } else {
-    speechText = "No hay puntajes registrados";
+    speechText = requestAttributes.t('POINT_UNREGISTER');
   }
+  
+  speechText += requestAttributes.t('ASK_MESSAGE');
     
     return handlerInput.responseBuilder
-      .speak(speechText)
-      .getResponse();
+        .speak(speechText)
+        .withShouldEndSession(false)
+        .getResponse();
   },
 };
 
@@ -548,10 +560,12 @@ const CleanPointsIntentHandler = {
   handle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes['puntuaciones'] = [];
-    const speechText = "Borrado";
+    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
+    const speechText = "Borrado. " + requestAttributes.t('ASK_MESSAGE');
     
     return handlerInput.responseBuilder
       .speak(speechText)
+      .withShouldEndSession(false)
       .getResponse();
   },
 };
@@ -571,6 +585,7 @@ const MoreInfoIntentHandler = {
     return handlerInput.responseBuilder
       .speak(speechText)
       .withSimpleCard(requestAttributes.t('GAME_NAME'), speechText)
+      .withShouldEndSession(false)
       .getResponse();
   },
 };
