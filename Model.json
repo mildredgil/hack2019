@@ -133,6 +133,8 @@
                     "name": "CleanPointsIntent",
                     "slots": [],
                     "samples": [
+                        "reiniciar puntajes",
+                        "iniciar tabla",
                         "limpiar puntos",
                         "vaciar puntaje"
                     ]
@@ -182,12 +184,7 @@
                         }
                     ],
                     "samples": [
-                        "soy {name}",
-                        "hola soy {name}",
-                        "llamame {name}",
-                        "recuerda que me llamo {name}",
-                        "mi nombre es {name}",
-                        "me llamo {name}"
+                        "{name}"
                     ]
                 },
                 {
@@ -240,6 +237,7 @@
                     "name": "DisplayPointsIntent",
                     "slots": [],
                     "samples": [
+                        "ver puntos",
                         "tabla de puntuaciones",
                         "puntuaciones",
                         "mostrar puntuaciones",
