@@ -502,9 +502,6 @@ const GameIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
     && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent'        
-    || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
-          && handlerInput.requestEnvelope.request.arguments.length > 0
-          && handlerInput.requestEnvelope.request.source.id === 'gameBtn');
   },
   handle(handlerInput) {
      return requestName(handlerInput);

@@ -79,21 +79,6 @@
 "height": "100%",
 "justifyContent": "center",
 "items": [
- {
-  "type": "AlexaButton",
-  "buttonText": "Jugar",
-  "id": "gameBtn",
-  "paddingLeft": "@spacingExtraLarge",
-  "paddingRight": "@spacingLarge",
-  "paddingBottom": "@spacingThin",
-  "paddingTop": "@spacingThin",
-  "primaryAction": {
-    "type": "SendEvent",
-    "arguments":[ 
-        "iniciar juego"
-    ]
-  }
-},
 {
   "type": "AlexaButton",
   "buttonText": "Jugar sin INTRO",
