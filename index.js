@@ -498,6 +498,19 @@ const RegisterNameIntentHandler = {
   }
 };  
 
+const GameIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+    && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent'        
+    || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.source.id === 'gameBtn');
+  },
+  handle(handlerInput) {
+     return requestName(handlerInput);
+  },
+};
+
 const FriendIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -512,20 +525,14 @@ const FriendIntentHandler = {
   }
 };
 
-const GameIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GameIntent';
-  },
-  handle(handlerInput) {
-    return requestName(handlerInput);    
-  },
-};
 
 const DisplayPointsIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'DisplayPointsIntent'
+     && handlerInput.requestEnvelope.request.intent.name === 'DisplayPointsIntent'
+    || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'ver puntuaciones')
   },
   handle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
@@ -555,7 +562,10 @@ const DisplayPointsIntentHandler = {
 const CleanPointsIntentHandler = {
   canHandle(handlerInput) {
       return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'CleanPointsIntent'
+      && handlerInput.requestEnvelope.request.intent.name === 'CleanPointsIntent'  
+      || (handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent'
+          && handlerInput.requestEnvelope.request.arguments.length > 0
+          && handlerInput.requestEnvelope.request.arguments[0] === 'borrar puntos')
   },
   handle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();

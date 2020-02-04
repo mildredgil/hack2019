@@ -79,36 +79,36 @@
 "height": "100%",
 "justifyContent": "center",
 "items": [
-     {
-    "type": "AlexaButton",
-    "buttonText": "Jugar",
-    "id": "containedButtonId",
-    "paddingLeft": "@spacingExtraLarge",
-    "paddingRight": "@spacingLarge",
-    "paddingBottom": "@spacingThin",
-    "paddingTop": "@spacingThin",
-    "primaryAction": {
-      "type": "SendEvent",
-      "arguments":[ 
-          "juego"
-      ]
-    }
-  },
-  {
-    "type": "AlexaButton",
-    "buttonText": "Jugar sin INTRO",
-    "id": "containedButtonId",
-    "paddingLeft": "@spacingExtraLarge",
-    "paddingRight": "@spacingLarge",
-    "paddingBottom": "@spacingThin",
-    "paddingTop": "@spacingThin",
-    "primaryAction": {
-      "type": "SendEvent",
-      "arguments":[ 
-          "jugar"
-      ]
-    }
-  },
+ {
+  "type": "AlexaButton",
+  "buttonText": "Jugar",
+  "id": "gameBtn",
+  "paddingLeft": "@spacingExtraLarge",
+  "paddingRight": "@spacingLarge",
+  "paddingBottom": "@spacingThin",
+  "paddingTop": "@spacingThin",
+  "primaryAction": {
+    "type": "SendEvent",
+    "arguments":[ 
+        "iniciar juego"
+    ]
+  }
+},
+{
+  "type": "AlexaButton",
+  "buttonText": "Jugar sin INTRO",
+  "id": "containedButtonId",
+  "paddingLeft": "@spacingExtraLarge",
+  "paddingRight": "@spacingLarge",
+  "paddingBottom": "@spacingThin",
+  "paddingTop": "@spacingThin",
+  "primaryAction": {
+    "type": "SendEvent",
+    "arguments":[ 
+        "jugar"
+    ]
+  }
+},
   {
     "type": "AlexaButton",
     "buttonText": "+Info",
@@ -141,7 +141,7 @@
   },
   {
     "type": "AlexaButton",
-    "buttonText": "Ver Puntajes",
+    "buttonText": "Borrar Puntajes",
     "id": "containedButtonId",
     "paddingLeft": "@spacingExtraLarge",
     "paddingRight": "@spacingLarge",
