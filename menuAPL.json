@@ -79,9 +79,19 @@
 "height": "100%",
 "justifyContent": "center",
 "items": [
+     {
+                      "type": "Image",
+                      "source": "https://pixabay.com/get/57e3d1434d5ba514f6d1867dda6d49214b6ac3e45659714172277ed29f/teotihuacan-1340799_1920.jpg",
+                      "position": "absolute",
+                      "width": "100vw",
+                      "height": "100vh",
+                      "scale": "best-fill"
+},
 {
   "type": "AlexaButton",
   "buttonText": "Jugar sin INTRO",
+  "colors": "#000000",
+  "colorTextPrimary": "#000000",
   "id": "containedButtonId",
   "paddingLeft": "@spacingExtraLarge",
   "paddingRight": "@spacingLarge",
@@ -92,6 +102,7 @@
     "arguments":[ 
         "jugar"
     ]
+    
   }
 },
   {
@@ -111,7 +122,7 @@
     }
   }, {
     "type": "AlexaButton",
-    "buttonText": "Ver Puntajes",
+    "buttonText": "Puntajes",
     "id": "containedButtonId",
     "paddingLeft": "@spacingExtraLarge",
     "paddingRight": "@spacingLarge",
